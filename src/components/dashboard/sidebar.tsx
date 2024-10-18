@@ -7,9 +7,9 @@ export default function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <nav className='w-[256px] h-full bg-gray-800 p-4 border-r-[1px] border-gray-200'>
+    <nav className='w-[256px] h-full bg-white p-4 border-r-[0.5px] border-gray-200 lg:block hidden'>
       <ul className='flex flex-col gap-y-4 w-full'>
-        <li className={`${pathname === '/dashboard' ? 'active bg-blue-400' : ''}  w-full`} >
+        <li className={`${pathname === '/dashboard' ? 'active bg-gray-800 text-white' : ''}  w-full rounded-md`} >
           <Link 
             className='w-full h-full flex items-center p-2'
             href="/dashboard"
@@ -17,7 +17,7 @@ export default function Sidebar() {
             Inicio
           </Link>
         </li>
-        <li className={`${pathname === '/dashboard/clientes' ? 'active bg-blue-400' : ''}  w-full`}>
+        <li className={`${pathname === '/dashboard/clientes' ? 'active bg-gray-800 text-white' : ''}  w-full rounded-md`}>
           <Link
             className='w-full h-full flex items-center p-2' 
             href="/dashboard/clientes"
@@ -25,7 +25,7 @@ export default function Sidebar() {
             Clientes
           </Link>
         </li>
-        <li className={`${pathname === '/dashboard/productos' ? 'active bg-blue-400' : ''}  w-full`}>
+        <li className={`${pathname === '/dashboard/productos' ? 'active bg-gray-800 text-white' : ''}  w-full rounded-md`}>
           <Link 
             className='w-full h-full flex items-center p-2'
             href="/dashboard/productos"
@@ -33,7 +33,7 @@ export default function Sidebar() {
             Productos
           </Link>
         </li>
-        <li className={`${pathname === '/dashboard/ventas' ? 'active bg-blue-400' : ''}  w-full`}>
+        <li className={`${pathname === '/dashboard/ventas' ? 'active bg-gray-800 text-white' : ''}  w-full rounded-md`}>
           <Link 
             className='w-full h-full flex items-center p-2'
             href="/dashboard/ventas"
@@ -41,7 +41,7 @@ export default function Sidebar() {
             Ventas
           </Link>
         </li>
-        <li className={`${pathname === '/dashboard/cupones' ? 'active bg-blue-400' : ''}  w-full`}>
+        <li className={`${pathname === '/dashboard/cupones' ? 'active bg-gray-800 text-white' : ''}  w-full rounded-md`}>
           <Link 
             className='w-full h-full flex items-center p-2'
             href="/dashboard/cupones"
@@ -49,7 +49,7 @@ export default function Sidebar() {
             Cupones
           </Link>
         </li>
-        <li className={`${pathname === '/dashboard/descuentos' ? 'active bg-blue-400' : ''}  w-full`}>
+        <li className={`${pathname === '/dashboard/descuentos' ? 'active bg-gray-800 text-white' : ''}  w-full rounded-md`}>
           <Link 
             className='w-full h-full flex items-center p-2'
             href="/dashboard/descuentos"
@@ -57,7 +57,7 @@ export default function Sidebar() {
             Descuentos
           </Link>
         </li>
-        <li className={`${pathname === '/dashboard/mensajes' ? 'active bg-blue-400' : ''}  w-full`}>
+        <li className={`${pathname === '/dashboard/mensajes' ? 'active bg-gray-800 text-white' : ''}  w-full rounded-md`}>
           <Link
             className='w-full h-full flex items-center p-2' 
             href="/dashboard/mensajes"
@@ -65,7 +65,7 @@ export default function Sidebar() {
             Mensajes
           </Link>
         </li>
-        <li className={`${pathname === '/dashboard/' ? 'active bg-blue-400' : ''}  w-full`}>
+        <li className={`${pathname === '/dashboard/' ? 'active bg-gray-800 text-white' : ''}  w-full rounded-md`}>
           <Link 
             className='w-full h-full flex items-center p-2'
             href="/dashboard/"

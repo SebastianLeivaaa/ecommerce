@@ -5,9 +5,9 @@ import Header from '@/components/dashboard/header';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="w-full h-screen flex flex-row">
+    <div className="w-full h-screen flex flex-row text-black">
       <Sidebar />
-      <div className="h-full w-full flex flex-col">
+      <div className="h-full w-full flex p-8 flex-col bg-gray-200">
         <Header />
         <main className='p-2 w-full h-full'>
             {children}

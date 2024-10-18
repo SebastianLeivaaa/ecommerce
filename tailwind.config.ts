@@ -8,6 +8,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      boxShadow: {
+        '3xl': '0 0px 30px -8px #000',
+      },
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
