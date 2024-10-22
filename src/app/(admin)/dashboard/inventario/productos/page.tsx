@@ -25,7 +25,7 @@ import {
 // Productos de ejemplo
 const initialProducts = [
   { id: 1, name: "Laptop Pro", description: "Potente laptop para profesionales", price: 1500000, descount: 0, category: "electronics", image: "/placeholder.svg", stock: 50, isActive: true },
-  { id: 2, name: "Camiseta Casual", description: "Camiseta cómoda para el día a día", price: 15000, descount: 0, category: "clothing", image: "/placeholder.svg", stock: 100, isActive: true },
+  { id: 2, name: "Camiseta Casual Epica", description: "Camiseta cómoda para el día a día", price: 15000, descount: 0, category: "clothing", image: "/placeholder.svg", stock: 100, isActive: true },
   { id: 3, name: "Libro de Cocina", description: "Recetas fáciles para principiantes", price: 5000, descount: 0, category: "books", image: "/placeholder.svg", stock: 30, isActive: true },
   { id: 4, name: "Smartphone X", description: "Último modelo con cámara avanzada", price: 450000, descount: 0, category: "electronics", image: "/placeholder.svg", stock: 20, isActive: true },
   { id: 5, name: "Zapatillas Deportivas", description: "Para correr y entrenar", price: 50000, descount: 0, category: "clothing", image: "/placeholder.svg", stock: 5, isActive: true },
