@@ -25,12 +25,21 @@ export default function Sidebar() {
             Clientes
           </Link>
         </li>
-        <li className={`${pathname === '/dashboard/productos' ? 'active bg-gray-800 text-white' : ''}  w-full rounded-md`}>
+        <li>INVENTARIO</li>
+        <li className={`${pathname === '/dashboard/inventario/productos/nuevo' ? 'active bg-gray-800 text-white' : ''}  w-full rounded-md`}>
           <Link 
             className='w-full h-full flex items-center p-2'
-            href="/dashboard/productos"
+            href="/dashboard/inventario/productos/nuevo"
           >
-            Productos
+            Nuevo producto
+          </Link>
+        </li>
+        <li className={`${pathname === '/dashboard/inventario/productos' ? 'active bg-gray-800 text-white' : ''}  w-full rounded-md`}>
+          <Link 
+            className='w-full h-full flex items-center p-2'
+            href="/dashboard/inventario/productos"
+          >
+            Catálogo de productos
           </Link>
         </li>
         <li className={`${pathname === '/dashboard/ventas' ? 'active bg-gray-800 text-white' : ''}  w-full rounded-md`}>
