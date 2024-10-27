@@ -11,10 +11,35 @@ export interface Product {
   isActive: boolean;
   category: string;
   image: string | null; // Puede que no siempre tenga imagen, puedes ajustarlo a null
-  createdAt: Date; // Este es el campo prod_fecha_creacion
+  createdAt: string; // Este es el campo prod_fecha_creacion
 }
-  // Función para obtener todos los productos
+  
+// Función para obtener todos los productos
 export const getAllProducts = async () => {
   const result = await query('SELECT * FROM productos');
   return result.rows;
 };
+
+// Función para actualizar datos de un producto
+export const updateProduct = async (product: Product) => {
+  const result = await query(
+    `UPDATE productos SET 
+      prod_nombre = $1, 
+      prod_descripcion = $2, 
+      prod_precio = $3, 
+      prod_descuento = $4, 
+      prod_stock = $5, 
+      prod_activo = $6
+    WHERE prod_id = $7`,
+    [
+      product.name,
+      product.description,
+      product.price,
+      product.discount,
+      product.stock,
+      product.isActive,
+      product.id
+    ]
+  );
+  return result.rowCount;
+}

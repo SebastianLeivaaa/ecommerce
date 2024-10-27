@@ -1,40 +1,24 @@
 // app/dashboard/products/page.tsx
 "use client"
 
-import { useState, useEffect } from "react"
-import { Button } from "@/components/ui/button"
+import { useEffect, useState } from "react"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
-import { Package, ShoppingCart, Users, BarChart2, Settings, Edit, Trash2, Search, ChevronLeft, ChevronRight } from "lucide-react"
 import { ProductCard } from "@/components/dashboard/products/productCard"
-import { Switch } from "@/components/ui/switch"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
-import { Badge } from "@/components/ui/badge"
-import { StockBadge } from "@/components/dashboard/products/stockBadge"
 import { PaginationControls } from "@/components/dashboard/shared/paginationControls"
 import { Product } from "@/models/productModel"
+import { useProducts } from "@/hooks/products/useProducts"
 import axios from 'axios';
 
 
-// Productos de ejemplo
+// Productos de ejempl
 
 const categories = ["Todos", "electronics", "clothing", "books"]
 
 
 export default function ProductsPage() {
 
-  const [products, setProducts] = useState<Product[]>([])
+  const { data: products = [], isLoading, isError } = useProducts(); // Utiliza useProducts
   const [currentPage, setCurrentPage] = useState(1)
   const [productsPerPage, setProductsPerPage] = useState(8)
   const [selectedCategory, setSelectedCategory] = useState("Todos")
@@ -51,35 +35,21 @@ export default function ProductsPage() {
 
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber)
 
-  /*const handleEditSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    setProducts(products.map(p => 
-      editingProduct && p.id === editingProduct.id 
-        ? { ...p, name: productName, description: productDescription, price: parseFloat(productPrice), descount: parseFloat(productDescount), category: productCategory }
-        : p
-    ))
-    setIsEditDialogOpen(false)
-    resetForm()
-  }*/
-
-
-  const fetchProducts = async () => {
-    try {
-      const response = await axios.get('/api/products');
-      setProducts(response.data);
-    } catch (error) {
-      console.error('Error al cargar productos:', error);
-    }
-  };
 
 
   useEffect(() => {
     setCurrentPage(1)
   }, [selectedCategory, searchTerm]);
 
-  useEffect(() => {
-    fetchProducts();
-  }, []);
+
+
+  if (isLoading) {
+    return <div>Cargando productos...</div>;
+  }
+
+  if (isError) {
+    return <div>Error al cargar productos.</div>;
+  }
 
   return (
     <div>
