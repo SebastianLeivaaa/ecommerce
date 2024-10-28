@@ -1,10 +1,13 @@
 // src/app/api/products/route.ts
 import { NextResponse } from 'next/server';
-import { getAllProducts, Product, updateProduct } from '@/models/productModel';
+import { getFilteredProducts, Product, updateProduct } from '@/models/productModel';
 
 export const GET = async (request: Request) => {
   try {
-    const productsData = await getAllProducts();
+    const url = new URL(request.url);
+    const active = url.searchParams.get('active') || 'false'; // Obtener categoría de los parámetros de búsqueda
+
+    const productsData = await getFilteredProducts({ active });
     const products: Product[] = productsData.map((item: any) => ({
       id: item.prod_id,
       name: item.prod_nombre,
@@ -13,18 +16,19 @@ export const GET = async (request: Request) => {
       discount: item.prod_descuento,
       stock: item.prod_stock,
       isActive: item.prod_activo,
-      category: '',
+      rating: item.prod_valoracion,
+      category: item.prod_categoria, // Asumiendo que existe en tu tabla
       image: item.prod_url_imagen,
       createdAt: new Date(item.prod_fecha_creacion).toISOString(),
     }));
-    console.log('Productos:', products);
-    
+
     return NextResponse.json(products, { status: 200 });
   } catch (error) {
     console.error('Error al obtener productos:', error);
     return NextResponse.json({ message: 'Error al obtener productos' }, { status: 500 });
   }
 };
+
 
 export const POST = async (request: Request) => {
   return NextResponse.json({ message: 'This is a POST request' }, { status: 200 });
