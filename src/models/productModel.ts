@@ -10,13 +10,28 @@ export interface Product {
   stock: number;
   isActive: boolean;
   category: string;
+  rating: number;
   image: string | null; // Puede que no siempre tenga imagen, puedes ajustarlo a null
   createdAt: string; // Este es el campo prod_fecha_creacion
 }
   
 // Función para obtener todos los productos
-export const getAllProducts = async () => {
-  const result = await query('SELECT * FROM productos');
+export const getFilteredProducts = async (filters: { active?: string} = {}) => {
+  const { active } = filters;
+
+  // Construir la consulta base
+  let sql = 'SELECT * FROM productos WHERE 1=1';
+  const params: any[] = [];
+
+  // Agregar condiciones de filtro si se proporcionan
+  if (active === 'true' || active === 'false') {
+    sql += ' AND prod_activo = $1';
+    params.push(active);
+  }
+
+  sql += ' ORDER BY prod_valoracion DESC';
+
+  const result = await query(sql, params);
   return result.rows;
 };
 
