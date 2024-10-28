@@ -15,25 +15,58 @@ export interface Product {
   createdAt: string; // Este es el campo prod_fecha_creacion
 }
   
-// Función para obtener todos los productos
-export const getFilteredProducts = async (filters: { active?: string} = {}) => {
-  const { active } = filters;
+// Función para obtener productos filtrados con paginación
+export const getFilteredProducts = async (filters: { 
+  sortOrder?: string, 
+  active?: string, 
+  sortBy?: string, 
+  page: number, 
+  productsPerPage: number 
+} = { page: 1, productsPerPage: 8 }) => {
+  const { sortOrder, active, sortBy, page, productsPerPage } = filters;
+  const offset = (page - 1) * productsPerPage;
 
   // Construir la consulta base
+
   let sql = 'SELECT * FROM productos WHERE 1=1';
+  let countSql = 'SELECT COUNT(prod_id) AS total FROM productos WHERE 1=1';
+
   const params: any[] = [];
 
   // Agregar condiciones de filtro si se proporcionan
   if (active === 'true' || active === 'false') {
     sql += ' AND prod_activo = $1';
-    params.push(active);
+    countSql += ' AND prod_activo = $1';
+    params.push(active === 'true');
   }
 
-  sql += ' ORDER BY prod_valoracion DESC';
+  // Determinar la columna de ordenamiento en función de sortBy
+  let orderColumn;
+  switch (sortBy) {
+    case 'rating':
+      orderColumn = 'prod_valoracion';
+      break;
+    case 'price':
+      orderColumn = 'prod_precio';
+      break;
+    case 'stock':
+      orderColumn = 'prod_stock';
+      break;
+    default:
+      orderColumn = 'prod_valoracion';
+      break;
+  }
 
+  // Agregar ordenamiento y paginación
+  sql += ` ORDER BY ${orderColumn} ${sortOrder === 'desc' ? 'DESC' : 'ASC'}, prod_nombre ASC LIMIT ${productsPerPage} OFFSET ${offset}`;
+  // Ejecutar la consulta con los parámetros
   const result = await query(sql, params);
-  return result.rows;
+  const countResult = await query(countSql, params);
+  const total = countResult.rows[0].total;
+
+  return { products: result.rows, total };
 };
+
 
 // Función para actualizar datos de un producto
 export const updateProduct = async (product: Product) => {
