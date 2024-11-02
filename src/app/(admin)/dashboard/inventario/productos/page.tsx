@@ -141,6 +141,7 @@ export default function ProductsPage() {
           <Input
             placeholder="Buscar productos..."
             value={searchTerm}
+            maxLength={100}
             onChange={(e) => setSearchTerm(e.target.value)} // Solo actualiza el estado
             onKeyDown={handleSearchKeyDown} // Maneja el evento de Enter
             className="pr-10"
