@@ -1,8 +1,7 @@
 import { query } from '../config/database';
 
-
 export interface Product {
-  id: string; // Si prod_id es UUID, entonces debe ser string, no number
+  id: string;
   name: string;
   description: string;
   price: number;
@@ -11,61 +10,83 @@ export interface Product {
   isActive: boolean;
   category: string;
   rating: number;
-  image: string | null; // Puede que no siempre tenga imagen, puedes ajustarlo a null
-  createdAt: string; // Este es el campo prod_fecha_creacion
+  image: string | null;
+  createdAt: string;
 }
-  
+
 // Función para obtener productos filtrados con paginación
 export const getFilteredProducts = async (filters: { 
   sortOrder?: string, 
   active?: string, 
   sortBy?: string, 
   page: number, 
-  productsPerPage: number 
+  productsPerPage: number,
+  category?: string | null,
+  searchTerm?: string | null,
 } = { page: 1, productsPerPage: 8 }) => {
-  const { sortOrder, active, sortBy, page, productsPerPage } = filters;
+  const { sortOrder, active, sortBy, page, productsPerPage, category, searchTerm } = filters;
   const offset = (page - 1) * productsPerPage;
 
-  // Construir la consulta base
+  let sql = 'SELECT * FROM productos pr WHERE 1=1';
+  let countSql = 'SELECT COUNT(prod_id) AS total FROM productos pr WHERE 1=1';
+  const sqlParams: any[] = [];
+  const countParams: any[] = [];
 
-  let sql = 'SELECT * FROM productos WHERE 1=1';
-  let countSql = 'SELECT COUNT(prod_id) AS total FROM productos WHERE 1=1';
-
-  const params: any[] = [];
-
-  // Agregar condiciones de filtro si se proporcionan
-  if (active === 'true' || active === 'false') {
-    sql += ' AND prod_activo = $1';
-    countSql += ' AND prod_activo = $1';
-    params.push(active === 'true');
+  // Filtrado por término de búsqueda
+  if (searchTerm) {
+    const searchTermFormatted = `%${searchTerm}%`;
+    sql = `SELECT * FROM productos pr JOIN producto_categoria pc ON pr.prod_id = pc.prca_prod_id WHERE (pr.prod_nombre ILIKE $${sqlParams.length + 1})`;
+    countSql = `SELECT COUNT(pr.prod_id) AS total FROM productos pr JOIN producto_categoria pc ON pr.prod_id = pc.prca_prod_id WHERE (pr.prod_nombre ILIKE $${countParams.length + 1})`;
+    sqlParams.push(searchTermFormatted);
+    countParams.push(searchTermFormatted);
   }
 
-  // Determinar la columna de ordenamiento en función de sortBy
+  // Filtrado por categoría
+  if (category) {
+    sql = `SELECT * FROM productos pr JOIN producto_categoria pc ON pr.prod_id = pc.prca_prod_id WHERE pc.prca_cate_id = $1`;
+    countSql = `SELECT COUNT(pr.prod_id) AS total FROM productos pr JOIN producto_categoria pc ON pr.prod_id = pc.prca_prod_id WHERE pc.prca_cate_id = $1`;
+    sqlParams.push(category);
+    countParams.push(category);
+  }
+
+
+  // Filtrado por estado activo
+  if (active === 'true' || active === 'false') {
+    sql += ` AND pr.prod_activo = $${sqlParams.length + 1}`;
+    countSql += ` AND pr.prod_activo = $${countParams.length + 1}`;
+    sqlParams.push(active);
+    countParams.push(active);
+  }
+
+  // Ordenar por columna
   let orderColumn;
   switch (sortBy) {
     case 'rating':
-      orderColumn = 'prod_valoracion';
+      orderColumn = 'pr.prod_valoracion';
       break;
     case 'price':
-      orderColumn = 'prod_precio';
+      orderColumn = 'pr.prod_precio';
       break;
     case 'stock':
-      orderColumn = 'prod_stock';
+      orderColumn = 'pr.prod_stock';
       break;
     default:
-      orderColumn = 'prod_valoracion';
+      orderColumn = 'pr.prod_valoracion';
       break;
   }
 
-  // Agregar ordenamiento y paginación
-  sql += ` ORDER BY ${orderColumn} ${sortOrder === 'desc' ? 'DESC' : 'ASC'}, prod_nombre ASC LIMIT ${productsPerPage} OFFSET ${offset}`;
-  // Ejecutar la consulta con los parámetros
-  const result = await query(sql, params);
-  const countResult = await query(countSql, params);
+  // Agregar orden y límites
+  sql += ` ORDER BY ${orderColumn} ${sortOrder === 'desc' ? 'DESC' : 'ASC'}, pr.prod_nombre ASC LIMIT $${sqlParams.length + 1} OFFSET $${sqlParams.length + 2}`;
+  sqlParams.push(productsPerPage, offset);
+
+  // Ejecutar consultas
+  const result = await query(sql, sqlParams);
+  const countResult = await query(countSql, countParams);
   const total = countResult.rows[0].total;
 
   return { products: result.rows, total };
 };
+
 
 
 // Función para actualizar datos de un producto

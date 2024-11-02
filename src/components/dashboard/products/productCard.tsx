@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { EditProductDialog } from "@/components/dashboard/products/dialogs/editProductDialog";
 import { Product } from "@/models/productModel";
 import { StarRating } from "./starRating";
+import { Edit } from "lucide-react";
 
 export function ProductCard({ product }: { product: Product }) {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
@@ -37,7 +38,7 @@ export function ProductCard({ product }: { product: Product }) {
       </CardContent>
       <CardFooter className="flex justify-between">
         <Button variant="outline" size="sm" onClick={() => setIsEditDialogOpen(true)}>
-          Editar
+          <Edit/> Editar
         </Button>
         <EditProductDialog
           product={product}

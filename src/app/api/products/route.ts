@@ -8,10 +8,20 @@ export const GET = async (request: Request) => {
     const active = url.searchParams.get('active') || undefined;
     const sortOrder = url.searchParams.get('sortOrder') || undefined;
     const sortBy = url.searchParams.get('sortBy') || 'rating';
-    const page = parseInt(url.searchParams.get('page') || '1', 10);
-    const productsPerPage = parseInt(url.searchParams.get('productsPerPage') || '8', 10);
+    const page = Math.max(1, parseInt(url.searchParams.get('page') || '1', 10)); // Asegura que page sea al menos 1
+    const productsPerPage = Math.max(1, parseInt(url.searchParams.get('productsPerPage') || '8', 10)); // Asegura que productsPerPage sea al menos 1
+    const category = url.searchParams.get('category') || null;
+    const searchTerm = url.searchParams.get('searchTerm') || null;
 
-    const { products: productsData, total: totalProducts } = await getFilteredProducts({ active, sortOrder, sortBy, page, productsPerPage });
+    const { products: productsData, total: totalProducts } = await getFilteredProducts({ 
+      active, 
+      sortOrder, 
+      sortBy, 
+      page, 
+      productsPerPage, 
+      category,
+      searchTerm
+    });
 
     const products: Product[] = productsData.map((item: any) => ({
       id: item.prod_id,
@@ -27,7 +37,7 @@ export const GET = async (request: Request) => {
       createdAt: new Date(item.prod_fecha_creacion).toISOString(),
     }));
 
-    return NextResponse.json({products, totalProducts}, { status: 200 });
+    return NextResponse.json({ products, totalProducts }, { status: 200 });
   } catch (error) {
     console.error('Error al obtener productos:', error);
     return NextResponse.json(
