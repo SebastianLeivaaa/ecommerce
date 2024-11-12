@@ -1,13 +1,13 @@
 // ProductCard.tsx
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
-import { StockBadge } from "@/components/dashboard/products/stockBadge";
+import { StockBadge } from "@/components/dashboard/products/shared/stockBadge";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { EditProductDialog } from "@/components/dashboard/products/dialogs/editProductDialog";
 import { Product } from "@/models/productModel";
-import { StarRating } from "./starRating";
 import { Edit } from "lucide-react";
+import { StarRating } from "@/components/dashboard/products/shared/starRating";
 
 export function ProductCard({ product }: { product: Product }) {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
@@ -26,7 +26,7 @@ export function ProductCard({ product }: { product: Product }) {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <img src={product.image ?? ""} alt={product.name} className="w-full h-48 object-cover mb-4 rounded-md" />
+        <img alt={product.name} className="w-full h-48 object-cover mb-4 rounded-md" />
         <p className="text-sm text-gray-600 mb-2">{product.description}</p>
         <p className="font-bold">${product.price}</p>
         <p className="text-sm text-gray-500">Categoría: {product.category}</p>

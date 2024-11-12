@@ -1,60 +1,41 @@
 // app/dashboard/products/page.tsx
-import React from 'react';
+"use client"
+
+import { useState } from 'react';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import GeneralProductData from '@/components/dashboard/products/newProduct/generalProductData';
+import VariantProductData from '@/components/dashboard/products/newProduct/variantProductData';
+
 
 export default function ProductsPage() {
+
+  const [step, setStep] = useState(1);
+
+  const handleNextStep = () => {
+    setStep(step + 1);
+  };
+
+  const handlePreviousStep = () => {
+    setStep(step - 1);
+  };
+
+  
+
   return (
     <div className='w-full h-full flex flex-col gap-y-4'>
-      <h1 className='text-5xl font-bold px-4'>Productos</h1>
-      <div className='bg-white rounded-md p-4 shadow-2xl'>
-        <h2 className='text-2xl font-bold'>Lista de productos</h2>
-        <table className='w-full mt-4'>
-          <thead>
-            <tr>
-              <th>Nombre</th>
-              <th>Descripcion</th>
-              <th>Precio</th>
-              <th>Stock</th>
-              <th>Categoria</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Producto 1</td>
-              <td>Descripcion del producto 1</td>
-              <td>$100.00</td>
-              <td>10</td>
-              <td>Electronica</td>
-              <td>
-                <button className='bg-blue-500 text-white p-2 rounded-md'>Editar</button>
-                <button className='bg-red-500 text-white p-2 rounded-md'>Eliminar</button>
-              </td>
-            </tr>
-            <tr>
-              <td>Producto 2</td>
-              <td>Descripcion del producto 2</td>
-              <td>$200.00</td>
-              <td>5</td>
-              <td>Electronica</td>
-              <td>
-                <button className='bg-blue-500 text-white p-2 rounded-md'>Editar</button>
-                <button className='bg-red-500 text-white p-2 rounded-md'>Eliminar</button>
-              </td>
-            </tr>
-            <tr>
-              <td>Producto 3</td>
-              <td>Descripcion del producto 3</td>
-              <td>$300.00</td>
-              <td>15</td>
-              <td>Electronica</td>
-              <td>
-                <button className='bg-blue-500 text-white p-2 rounded-md'>Editar</button>
-                <button className='bg-red-500 text-white p-2 rounded-md'>Eliminar</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <h1 className='text-5xl font-bold px-4'>Agregar nuevo producto</h1>
+      <form className='space-y-6 w-full'>
+        <div className="mb-4">
+          <Tabs value={`${step}`} onValueChange={(value) => setStep(parseInt(value))}> 
+            <TabsList>
+              <TabsTrigger value="1" >Paso 1: Detalles Generales</TabsTrigger>
+              <TabsTrigger value="2"disabled={true}>Paso 2: Atributos y Variantes</TabsTrigger>
+            </TabsList>
+          </Tabs>
+        </div>
+        {step === 1 && <GeneralProductData onNextStep={handleNextStep} />}
+        {step === 2 && <VariantProductData/>}
+      </form>
     </div>
   );
 }

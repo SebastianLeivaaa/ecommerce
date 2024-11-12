@@ -4,11 +4,11 @@ import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ProductCard } from "@/components/dashboard/products/productCard";
+import { ProductCard } from "@/components/dashboard/products/shared/productCard";
 import { PaginationControls } from "@/components/dashboard/shared/paginationControls";
 import { useProducts } from "@/hooks/products/useProducts";
-import { ProductCardSkeleton } from "@/components/dashboard/products/productCardSkeleton";
-import { NoProductsFound } from "@/components/dashboard/products/noProductsFound";
+import { ProductCardSkeleton } from "@/components/dashboard/products/shared/productCardSkeleton";
+import { NoProductsFound } from "@/components/dashboard/products/shared/noProductsFound";
 import { useCategories } from "@/hooks/categories/useCategories";
 import { CategoryFilter } from "@/components/dashboard/categories/categoryFIlter";
 import { Category } from "@/models/categoryModel";
@@ -157,9 +157,9 @@ export default function ProductsPage() {
             <span className="sr-only">Buscar</span>
           </Button>
         </div>
-        <div className="lg:flex items-center gap-4 grid grid-cols-2">
+        <div className="sm:flex items-center gap-4 grid grid-cols-2 w-full">
           <Select value={sortBy} onValueChange={(value) => updateFilter("sortBy", value, currentPage)}>
-            <SelectTrigger className="w-[180px] bg-white">
+            <SelectTrigger className="w-full sm:w-[180px] bg-white">
               <SelectValue placeholder="Ordenar por" />
             </SelectTrigger>
             <SelectContent>
@@ -169,7 +169,7 @@ export default function ProductsPage() {
             </SelectContent>
           </Select>
           <Select value={sortOrder} onValueChange={(value) => updateFilter("sortOrder", value, currentPage)}>
-            <SelectTrigger className="w-[180px] bg-white">
+            <SelectTrigger className="w-full sm:w-[180px] bg-white">
               <SelectValue placeholder="Orden" />
             </SelectTrigger>
             <SelectContent>
@@ -178,7 +178,7 @@ export default function ProductsPage() {
             </SelectContent>
           </Select>
           <Select value={activeFilter} onValueChange={(value) => updateFilter("active", value, currentPage)}>
-            <SelectTrigger className="w-[180px] bg-white">
+            <SelectTrigger className="w-full sm:w-[180px] bg-white">
               <SelectValue placeholder="Estado" />
             </SelectTrigger>
             <SelectContent>
@@ -188,7 +188,7 @@ export default function ProductsPage() {
             </SelectContent>
           </Select>
           <Select value={productsPerPage.toString()} onValueChange={(value) => updateFilter("productsPerPage", value, currentPage)}>
-            <SelectTrigger className="w-[180px] bg-white">
+            <SelectTrigger className="w-full sm:w-[180px] bg-white">
               <SelectValue placeholder="Productos por página" />
             </SelectTrigger>
             <SelectContent>

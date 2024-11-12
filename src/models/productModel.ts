@@ -2,6 +2,7 @@ import { query } from '../config/database';
 
 export interface Product {
   id: string;
+  slug: string;
   name: string;
   description: string;
   price: number;
@@ -9,9 +10,11 @@ export interface Product {
   stock: number;
   isActive: boolean;
   category: string;
+  brand: string;
+  sku: string;
   rating: number;
-  image: string | null;
   createdAt: string;
+  images: File[];
 }
 
 // Función para obtener productos filtrados con paginación

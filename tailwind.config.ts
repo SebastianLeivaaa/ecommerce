@@ -8,6 +8,17 @@ const config: Config = {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
+	screens: {
+		'xs': '490px',
+		'sm': '640px',
+		'md': '768px',
+		'l': '980px',
+		'g': '1045px',
+		'lg': '1024px',
+		'xlg': '1140px',
+		'xl': '1280px',
+		'2xl': '1536px',
+	},
   	extend: {
   		boxShadow: {
   			'3xl': '0 0px 30px -8px #000'

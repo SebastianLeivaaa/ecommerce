@@ -12,13 +12,11 @@ export const getCategories = async (parent_id: string | null = null) => {
     let sql = 'SELECT * FROM categorias WHERE cate_padre_id IS NULL';
     const params: any[] = [];
 
-    // Si parent_id se proporciona, ajusta la consulta
     if (parent_id) {
         sql = 'SELECT * FROM categorias WHERE cate_padre_id = $1';
         params.push(parent_id);
     }
 
     const { rows } = await query(sql, params)
-    console.log(rows);
     return rows;
 }
