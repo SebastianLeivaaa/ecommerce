@@ -26,7 +26,7 @@ export default function ProductsPage() {
       <h1 className='text-5xl font-bold px-4'>Agregar nuevo producto</h1>
       <form className='space-y-6 w-full'>
         <div className="mb-4">
-          <Tabs value={`${step}`} onValueChange={(value) => setStep(parseInt(value))}> 
+          <Tabs value={`${step}`} onValueChange={(value: string) => setStep(parseInt(value))}> 
             <TabsList>
               <TabsTrigger value="1" >Paso 1: Detalles Generales</TabsTrigger>
               <TabsTrigger value="2"disabled={true}>Paso 2: Atributos y Variantes</TabsTrigger>

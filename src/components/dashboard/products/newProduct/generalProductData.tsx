@@ -28,7 +28,7 @@ export default function GeneralProductData({ onNextStep }: { onNextStep: () => v
     const result = productSchema.safeParse(product);  // Validación usando Zod
     if (!result.success) {
       const newErrors: Record<string, string> = {};
-      result.error.errors.forEach((err) => {
+      result.error.errors.forEach((err: { path: (string | number)[], message: string }) => {
         if (err.path[0]) {
           newErrors[err.path[0].toString()] = err.message;
         }
