@@ -42,8 +42,10 @@ export default function GeneralProductData({ onNextStep }: { onNextStep: () => v
 
   // Actualiza el estado de cada campo
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { id, value } = e.target;
-    setProduct((prev) => ({ ...prev, [id]: value }));
+    const { id, value, type } = e.target;
+
+    const procesedValue = type === "number" ? Number(value) : value;
+    setProduct((prev) => ({ ...prev, [id]: procesedValue }));
   };
 
   // Manejo de imágenes
@@ -66,7 +68,7 @@ export default function GeneralProductData({ onNextStep }: { onNextStep: () => v
         <div className="flex flex-col gap-y-1">
           <Label htmlFor="name">Nombre del Producto</Label>
           <Input id="name" type="text" placeholder="Nombre del producto" value={product.name} onChange={handleChange} />
-          {errors.name && <p className="text-red-500">{errors.name}</p>}
+          {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
         </div>
         <div className="flex flex-col gap-y-1">
           <Label htmlFor="category">Categoría</Label>
@@ -81,6 +83,7 @@ export default function GeneralProductData({ onNextStep }: { onNextStep: () => v
               <SelectItem value="home">Hogar</SelectItem>
             </SelectContent>
           </Select>
+          {errors.category && <p className="text-red-500 text-sm">{errors.category}</p>}
         </div>
         <div className="flex flex-col gap-y-1 col-span-2">
           <Label htmlFor="description">Descripción</Label>
@@ -91,18 +94,22 @@ export default function GeneralProductData({ onNextStep }: { onNextStep: () => v
             value={product.description}
             onChange={handleChange}
           />
+          {errors.description && <p className="text-red-500 text-sm">{errors.description}</p>}
         </div>
         <div className="flex flex-col gap-y-1">
           <Label htmlFor="sku">SKU</Label>
           <Input id="sku" type="text" placeholder="SKU del producto" value={product.sku} onChange={handleChange} />
+          {errors.sku && <p className="text-red-500 text-sm">{errors.sku}</p>}
         </div>
         <div className="flex flex-col gap-y-1">
-          <Label htmlFor="price">Precio</Label>
-          <Input id="price" type="number" placeholder="Precio del producto" value={product.price} onChange={handleChange} />
+          <Label htmlFor="price">Precio ($)</Label>
+          <Input id="price" type="number" min={1} placeholder="Precio del producto" value={product.price} onChange={handleChange} />
+          {errors.price && <p className="text-red-500 text-sm">{errors.price}</p>}
         </div>
         <div className="flex flex-col gap-y-1">
           <Label htmlFor="discount">Descuento (%)</Label>
           <Input id="discount" type="number" max={100} min={0} placeholder="Descuento del producto" value={product.discount} onChange={handleChange} />
+          {errors.discount && <p className="text-red-500 text-sm">{errors.discount}</p>}
         </div>
         <div className="flex flex-col gap-y-1">
           <Label htmlFor="active">Activo</Label>
@@ -118,11 +125,13 @@ export default function GeneralProductData({ onNextStep }: { onNextStep: () => v
         </div>
         <div className="flex flex-col gap-y-1">
           <Label htmlFor="stock">Stock</Label>
-          <Input id="stock" type="number" placeholder="Stock del producto" value={product.stock} onChange={handleChange} />
+          <Input id="stock" type="number" min={0} placeholder="Stock del producto" value={product.stock} onChange={handleChange} />
+          {errors.stock && <p className="text-red-500 text-sm">{errors.stock}</p>}
         </div>
         <div className="flex flex-col gap-y-1">
           <Label htmlFor="brand">Marca</Label>
           <Input id="brand" type="text" placeholder="Marca del producto" value={product.brand} onChange={handleChange} />
+          {errors.brand && <p className="text-red-500 text-sm">{errors.brand}</p>}
         </div>
         <div className="flex flex-col gap-y-1 col-span-2">
           <Label>Galeria del producto</Label>
@@ -151,6 +160,7 @@ export default function GeneralProductData({ onNextStep }: { onNextStep: () => v
               <Upload size={24} />
             </label>
           </div>
+          {errors.images && <p className="text-red-500 text-sm">{errors.images}</p>}
         </div>
         <div className="col-span-2 flex justify-end">
           <Button type='button' className="bg-blue-600 hover:bg-blue-700" onClick={handleNextStep}>

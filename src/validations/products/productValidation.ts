@@ -11,7 +11,7 @@ export const productSchema = z.object({
   category: z.string().nonempty("La categoría es obligatoria"),
   brand: z.string().min(1, "La marca es obligatoria"),
   sku: z.string().min(1, "El SKU es obligatorio"),
-  images: z.array(z.instanceof(File)).min(1, "Debe agregar al menos una imagen"),
+  images: z.array(z.instanceof(File)).max(10, "Máximo 10 imágenes por producto"),
 });
 
 // Tipos generados por Zod a partir del esquema para una mejor tipificación

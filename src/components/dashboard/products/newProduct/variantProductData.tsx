@@ -1,6 +1,17 @@
+import { useState } from "react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { Plus, X, Upload, Info, Save, Shuffle, Box } from "lucide-react";
+import {
+  Plus,
+  X,
+  Upload,
+  Info,
+  Save,
+  Shuffle,
+  Box,
+  ChevronDown,
+  ChevronUp,
+} from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -28,6 +39,20 @@ import {
 } from "@/components/ui/table";
 
 export default function VariantProductData() {
+  const [showNewPrimaryAttribute, setShowNewPrimaryAttribute] = useState(false);
+  const [showNewSecondaryAttribute, setShowNewSecondaryAttribute] =
+    useState(false);
+  const [primaryAttributesData, setPrimaryAttributesData] = useState([]);
+  const [secondaryAttributesData, setSecondaryAttributesData] = useState([]);
+  const [selectedPrimaryAttribute, setSelectedPrimaryAttribute] = useState({
+    name: "",
+    values: [],
+  });
+  const [selectedSecondaryAttribute, setSelectedSecondaryAttribute] = useState({
+    name: "",
+    values: [],
+  });
+
   return (
     <Card>
       <CardHeader>
@@ -35,7 +60,7 @@ export default function VariantProductData() {
           Configuración de Atributos y Variantes
         </CardTitle>
       </CardHeader>
-      <CardContent className="space-y-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+      <CardContent className="space-y-6 grid grid-cols-1 md:grid-cols-2 gap-4 gap-x-8">
         <Alert className="col-span-2">
           <AlertTitle className="text-xl font-bold">Nota</AlertTitle>
           <AlertDescription>
@@ -64,7 +89,12 @@ export default function VariantProductData() {
             </TooltipProvider>
           </div>
           <div className="flex flex-col xs:flex-row gap-4">
-            <Select>
+            <Select
+              name="primary-attribute"
+              onValueChange={(value) => {
+                setSelectedPrimaryAttribute({ name: value, values: [] });
+              }}
+            >
               <SelectTrigger>
                 <SelectValue placeholder="Selecciona el atributo principal" />
               </SelectTrigger>
@@ -73,54 +103,23 @@ export default function VariantProductData() {
                 <SelectItem value="material">Material</SelectItem>
               </SelectContent>
             </Select>
-            <Button className="bg-white border-blue-600 border-[1px] text-blue-600 hover:bg-blue-700 hover:text-white">
-              <Plus size={16} />
+            <Button
+              onClick={() => {
+                setShowNewPrimaryAttribute(!showNewPrimaryAttribute);
+                setShowNewSecondaryAttribute(false);
+              }}
+              type="button"
+              className="bg-white border-blue-600 border-[1px] text-blue-600 hover:bg-blue-700 hover:text-white"
+            >
+              {showNewPrimaryAttribute ? (
+                <ChevronUp size={16} />
+              ) : (
+                <ChevronDown size={16} />
+              )}
               Agregar atributo
             </Button>
           </div>
-          <div>
-            <h3 className="text-lg font-semibold mb-2">Valores de</h3>
-            <div className="flex flex-wrap gap-2 mb-2">
-              <Badge variant="secondary" className="text-sm py-1 px-2">
-                rojo
-                <button className="ml-2 text-red-500">
-                  <X size={12} />
-                </button>
-              </Badge>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Select>
-                <SelectTrigger>
-                  <SelectValue placeholder="Selecciona un valor" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="rojo">rojo</SelectItem>
-                </SelectContent>
-              </Select>
-              <Input placeholder="Agregar valor personalizado" />
-            </div>
-            <Card className="mt-4">
-              <CardContent className="pt-4">
-                <h4 className="font-semibold mb-2">Imágenes para rojo</h4>
-                <div className="flex flex-wrap gap-2">
-                  <div className="relative">
-                    <img className="w-24 h-24 object-cover rounded" />
-                    <button
-                      type="button"
-                      className="absolute top-0 right-0 bg-red-700 hover:bg-red-800 text-white rounded-full p-1"
-                    >
-                      <X size={16} />
-                    </button>
-                  </div>
-                  <label className="w-24 h-24 flex items-center justify-center border-2 border-dashed rounded cursor-pointer">
-                    <input type="file" multiple className="hidden" />
-                    <Upload size={24} />
-                  </label>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-          <div>
+          {showNewPrimaryAttribute && (
             <Card>
               <CardContent className="pt-4">
                 <h4 className="font-semibold mb-2">Nuevo Atributo Principal</h4>
@@ -154,7 +153,53 @@ export default function VariantProductData() {
                 </div>
               </CardContent>
             </Card>
-          </div>
+          )}
+          {selectedPrimaryAttribute.name && (
+            <div>
+              <h3 className="text-lg font-semibold mb-2">
+                Valores de {selectedPrimaryAttribute.name}
+              </h3>
+              <div className="flex flex-wrap gap-2 mb-2">
+                <Badge variant="secondary" className="text-sm py-1 px-2">
+                  rojo
+                  <button className="ml-2 text-red-500">
+                    <X size={12} />
+                  </button>
+                </Badge>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <Select>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Selecciona un valor" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="rojo">rojo</SelectItem>
+                  </SelectContent>
+                </Select>
+                <Input placeholder="Agregar valor personalizado" />
+              </div>
+              <Card className="mt-4">
+                <CardContent className="pt-4">
+                  <h4 className="font-semibold mb-2">Imágenes para rojo</h4>
+                  <div className="flex flex-wrap gap-2">
+                    <div className="relative">
+                      <img className="w-24 h-24 object-cover rounded" />
+                      <button
+                        type="button"
+                        className="absolute top-0 right-0 bg-red-700 hover:bg-red-800 text-white rounded-full p-1"
+                      >
+                        <X size={16} />
+                      </button>
+                    </div>
+                    <label className="w-24 h-24 flex items-center justify-center border-2 border-dashed rounded cursor-pointer">
+                      <input type="file" multiple className="hidden" />
+                      <Upload size={24} />
+                    </label>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          )}
         </div>
         <div className="mb-4 space-y-6 lg:col-span-1 col-span-2">
           <div className="flex flex-row items-center">
@@ -176,7 +221,12 @@ export default function VariantProductData() {
             </TooltipProvider>
           </div>
           <div className="flex flex-col xs:flex-row gap-8">
-            <Select>
+            <Select
+              name="secondary-attribute"
+              onValueChange={(value) => {
+                setSelectedSecondaryAttribute({ name: value, values: [] });
+              }}
+            >
               <SelectTrigger>
                 <SelectValue placeholder="Agregar atributo secundario" />
               </SelectTrigger>
@@ -185,77 +235,93 @@ export default function VariantProductData() {
                 <SelectItem value="weight">Peso</SelectItem>
               </SelectContent>
             </Select>
-            <Button className="bg-white border-blue-600 border-[1px] text-blue-600 hover:bg-blue-700 hover:text-white">
-              <Plus size={16} />
+            <Button
+              type="button"
+              onClick={() => {
+                setShowNewSecondaryAttribute(!showNewSecondaryAttribute);
+              }}
+              className="bg-white border-blue-600 border-[1px] text-blue-600 hover:bg-blue-700 hover:text-white"
+            >
+              {showNewSecondaryAttribute ? (
+                <ChevronUp size={16} />
+              ) : (
+                <ChevronDown size={16} />
+              )}
               Agregar atributo
             </Button>
           </div>
-          <Card>
-            <CardContent className="pt-4">
-              <h4 className="font-semibold mb-2">Nuevo Atributo Secundario</h4>
-              <div className="space-y-2">
-                <Input placeholder="Nombre del atributo" name="name" />
-                <div className="flex gap-2">
-                  <Input placeholder="Valor" name="value" />
-                  <Button size="icon" className="bg-red-700 hover:bg-red-800">
+          {showNewSecondaryAttribute && (
+            <Card>
+              <CardContent className="pt-4">
+                <h4 className="font-semibold mb-2">
+                  Nuevo Atributo Secundario
+                </h4>
+                <div className="space-y-2">
+                  <Input placeholder="Nombre del atributo" name="name" />
+                  <div className="flex gap-2">
+                    <Input placeholder="Valor" name="value" />
+                    <Button size="icon" className="bg-red-700 hover:bg-red-800">
+                      <X size={16} />
+                    </Button>
+                  </div>
+                  <div className="flex flex-col xs:flex-row gap-2 justify-end">
+                    <Button
+                      type="button"
+                      className="bg-white border-blue-600 border-[1px] text-blue-600 hover:bg-blue-700 hover:text-white"
+                    >
+                      <Plus className="h-4 w-4" /> Agregar valor
+                    </Button>
+                    <Button
+                      type="button"
+                      className="bg-blue-600 hover:bg-blue-700"
+                    >
+                      <Save className="h-4 w-4" />
+                      Guardar Nuevo Atributo
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+          {selectedSecondaryAttribute.name && (
+            <Card className="mb-4">
+              <CardContent className="pt-4">
+                <div className="flex justify-between items-center mb-2">
+                  <h4 className="font-semibold">Talla</h4>
+                  <Button className="bg-red-700 hover:bg-red-800" size="icon">
                     <X size={16} />
                   </Button>
                 </div>
-                <div className="flex flex-col xs:flex-row gap-2 justify-end">
-                  <Button
-                    type="button"
-                    className="bg-white border-blue-600 border-[1px] text-blue-600 hover:bg-blue-700 hover:text-white"
-                  >
-                    <Plus className="h-4 w-4" /> Agregar valor
-                  </Button>
-                  <Button
-                    type="button"
-                    className="bg-blue-600 hover:bg-blue-700"
-                  >
-                    <Save className="h-4 w-4" />
-                    Guardar Nuevo Atributo
-                  </Button>
+                <div className="flex flex-wrap gap-2 mb-2">
+                  <Badge variant="secondary" className="text-sm py-1 px-2">
+                    xl
+                    <button className="ml-2 text-red-500">
+                      <X size={12} />
+                    </button>
+                  </Badge>
                 </div>
-              </div>
-            </CardContent>
-          </Card>
-          <Card className="mb-4">
-            <CardContent className="pt-4">
-              <div className="flex justify-between items-center mb-2">
-                <h4 className="font-semibold">Talla</h4>
-                <Button className="bg-red-700 hover:bg-red-800" size="icon">
-                  <X size={16} />
-                </Button>
-              </div>
-              <div className="flex flex-wrap gap-2 mb-2">
-                <Badge variant="secondary" className="text-sm py-1 px-2">
-                  xl
-                  <button className="ml-2 text-red-500">
-                    <X size={12} />
-                  </button>
-                </Badge>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <Select>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Selecciona un valor" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="s">s</SelectItem>
-                  </SelectContent>
-                </Select>
-                <div className="col-span-2 flex flex-col xs:flex-row gap-6">
-                  <Input placeholder="Valor personalizado" />
-                  <Button
-                    type="button"
-                    className="bg-white border-blue-600 border-[1px] text-blue-600 hover:bg-blue-700 hover:text-white"
-                  >
-                    <Plus className="h-4 w-4" /> Agregar valor personalizado
-                  </Button>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <Select>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Selecciona un valor" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="s">s</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <div className="col-span-2 flex flex-col xs:flex-row gap-6">
+                    <Input placeholder="Valor personalizado" />
+                    <Button
+                      type="button"
+                      className="bg-white border-blue-600 border-[1px] text-blue-600 hover:bg-blue-700 hover:text-white"
+                    >
+                      <Plus className="h-4 w-4" /> Agregar valor personalizado
+                    </Button>
+                  </div>
                 </div>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          )}
         </div>
         <div className="w-full flex justify-center col-span-2">
           <Button className="bg-blue-600 hover:bg-blue-700 text-white flex text-center justify-center items-center text-lg p-6">
